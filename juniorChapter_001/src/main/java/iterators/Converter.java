@@ -18,14 +18,12 @@ public class Converter {
             private final Iterator<Iterator<Integer>> iterators = it;
             private Iterator<Integer> currentIterator = null;
 
-            private void checkIterator(){
+            private void checkIterator() {
                 if (currentIterator == null || (currentIterator != null && !currentIterator.hasNext())) {
                     currentIterator = null;
-                    while (iterators.hasNext())
-                    {
+                    while (iterators.hasNext()) {
                         Iterator<Integer> nextIterator = iterators.next();
-                        if (nextIterator.hasNext())
-                        {
+                        if (nextIterator.hasNext()) {
                             currentIterator = nextIterator;
                             break;
                         }
@@ -42,8 +40,7 @@ public class Converter {
             @Override
             public Integer next() {
                 checkIterator();
-                if (currentIterator == null)
-                {
+                if (currentIterator == null) {
                     throw new NoSuchElementException();
                 }
                 return currentIterator.next();
