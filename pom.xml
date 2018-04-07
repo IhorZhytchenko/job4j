@@ -56,5 +56,6 @@
 
     <modules>
        <module>chapter_001</module>
+       <module>juniorChapter_001</module>
      </modules>
 </project>
