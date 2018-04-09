@@ -60,6 +60,10 @@ public class SimpleList<T> implements Iterable<T> {
         this.objects[--this.size] = null;
     }
 
+    public int size() {
+        return this.size;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new Itr();
