@@ -45,9 +45,9 @@ public class UserStoreTest {
         assertThat(store.findById("5a"), is(user5));
         assertThat(store.delete("5a"), is(true));
         assertThat(store.delete("5a4"), is(false));
-        assertThat(store.replace("4a",new User("6a")), is(true));
-        assertThat(store.replace("4a",new User("6a")), is(false));
-        assertThat(store.replace("4a",new User("6a")), is(false));
+        assertThat(store.replace("4a", new User("6a")), is(true));
+        assertThat(store.replace("4a", new User("6a")), is(false));
+        assertThat(store.replace("4a", new User("6a")), is(false));
 
 
     }

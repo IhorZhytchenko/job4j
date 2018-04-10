@@ -22,7 +22,7 @@ public class SimpleArrayList<T> implements Iterable<T> {
     /**
      * Constructs an empty list with an initial capacity of ten.
      */
-    public SimpleArrayList(){
+    public SimpleArrayList() {
         this.container =  new Object[DEFAULT_CAPACITY];
         this.size = 0;
     }
@@ -30,12 +30,12 @@ public class SimpleArrayList<T> implements Iterable<T> {
      * Constructs an empty list with the specified initial capacity.
      * @param capacity the initial length of the list
      */
-    public SimpleArrayList(int capacity){
+    public SimpleArrayList(int capacity) {
         if (capacity >= 0) {
             this.container = new Object[capacity];
             this.size = 0;
         } else {
-            throw new IllegalArgumentException("Illegal Capacity: "+ capacity);
+            throw new IllegalArgumentException("Illegal Capacity: " + capacity);
         }
     }
     /**
@@ -43,7 +43,7 @@ public class SimpleArrayList<T> implements Iterable<T> {
      *
      * @param value element to be appended to this list
      */
-    public void add(T value){
+    public void add(T value) {
         this.ensureCapacity(size + 1);
         this.container[size++] = value;
         this.modCount++;
@@ -79,7 +79,7 @@ public class SimpleArrayList<T> implements Iterable<T> {
     }
 
     private void ensureCapacity(int capacity) {
-        if (capacity >= this.container.length){
+        if (capacity >= this.container.length) {
             int newCapacity;
             if (this.container.length < DEFAULT_CAPACITY) {
                 newCapacity = DEFAULT_CAPACITY;
