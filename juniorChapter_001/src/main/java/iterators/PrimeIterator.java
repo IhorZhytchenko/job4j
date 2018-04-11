@@ -12,11 +12,10 @@ import java.util.NoSuchElementException;
  */
 public class PrimeIterator implements Iterator {
     private final  int[] values;
-    private int index = -1;
+    private int index = -2;
 
     public PrimeIterator(int[] values) {
         this.values = values;
-        index = findPrimeNumber();
     }
 
     /**
@@ -47,16 +46,20 @@ public class PrimeIterator implements Iterator {
 
     @Override
     public boolean hasNext() {
+        if (this.index == -2) {
+            this.index = -1;
+            this.index = findPrimeNumber();
+        }
         return index != -1;
     }
 
     @Override
     public Object next() {
-        if (index == -1) {
+        if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         int result = values[index];
-        index = findPrimeNumber();
+        this.index = findPrimeNumber();
         return result;
     }
 }
