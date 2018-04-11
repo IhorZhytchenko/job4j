@@ -16,15 +16,15 @@ public class Converter {
 
         return new Iterator<Integer>() {
             private final Iterator<Iterator<Integer>> iterators = it;
-            private Iterator<Integer> currentIterator = null;
+            private Iterator<Integer> itr = null;
 
             private void checkIterator() {
-                if (currentIterator == null || (currentIterator != null && !currentIterator.hasNext())) {
-                    currentIterator = null;
+                if (itr == null || (itr != null && !itr.hasNext())) {
+                    itr = null;
                     while (iterators.hasNext()) {
-                        Iterator<Integer> nextIterator = iterators.next();
-                        if (nextIterator.hasNext()) {
-                            currentIterator = nextIterator;
+                        Iterator<Integer> iterator = iterators.next();
+                        if (iterator.hasNext()) {
+                            itr = iterator;
                             break;
                         }
                     }
@@ -34,16 +34,16 @@ public class Converter {
             @Override
             public boolean hasNext() {
                 checkIterator();
-                return currentIterator != null;
+                return itr != null;
             }
 
             @Override
             public Integer next() {
                 checkIterator();
-                if (currentIterator == null) {
+                if (itr == null) {
                     throw new NoSuchElementException();
                 }
-                return currentIterator.next();
+                return itr.next();
             }
         };
     }
