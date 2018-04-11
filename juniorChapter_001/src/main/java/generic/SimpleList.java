@@ -11,8 +11,8 @@ import java.util.NoSuchElementException;
  * @since 09.04.2018
  */
 public class SimpleList<T> implements Iterable<T> {
-    Object[] objects;
-    int size;
+    private Object[] objects;
+    private int size;
     /**
      * Constructs an empty list with the specified initial length.
      * @param length the initial length of the list
@@ -70,11 +70,7 @@ public class SimpleList<T> implements Iterable<T> {
     }
 
     private class Itr implements Iterator<T> {
-        int cursor = 0;
-
-        Itr() {
-
-        }
+        private int cursor = 0;
 
         @Override
         public boolean hasNext() {
