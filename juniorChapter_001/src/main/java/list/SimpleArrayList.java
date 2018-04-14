@@ -95,10 +95,6 @@ public class SimpleArrayList<T> implements Iterable<T> {
         int cursor = 0;
         int expectedModCount = SimpleArrayList.this.modCount;
 
-        Itr() {
-
-        }
-
         @Override
         public boolean hasNext() {
             return this.cursor < SimpleArrayList.this.size;
