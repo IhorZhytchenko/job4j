@@ -14,11 +14,7 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     private int modCount = 0;
     private Node<T> first;
     private Node<T> last;
-    /**
-     * Constructs an empty list.
-     */
-    public SimpleLinkedList() {
-    }
+
     /**
      * Appends the specified element to the end of this list.
      *
@@ -91,9 +87,6 @@ public class SimpleLinkedList<T> implements Iterable<T> {
         private Node<T> next = SimpleLinkedList.this.first;
         private int nextIndex = 0;
         int expectedModCount = SimpleLinkedList.this.modCount;
-
-        Itr() {
-        }
 
         @Override
         public boolean hasNext() {
