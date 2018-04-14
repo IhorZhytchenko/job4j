@@ -15,21 +15,23 @@ public class Cycle {
      * @return true if list contains a loop, or  false if list does not contain a loop
      */
     boolean hasCycle(final Node first) {
-        Cycle.Node f = first;
-        int count = 0;
+        Node turtle = first;
+        Node hare = first;
         boolean result = false;
-        while (f.next != null) {
-            f = f.next;
-            count++;
-            Cycle.Node node = first;
-            for (int i = 0; i < count; i++) {
-                if (node == f) {
-                    result = true;
-                    break;
-                }
-                node = node.next;
+        while(true) {
+            turtle = turtle.next;
+            if(hare.next != null) {
+                hare = hare.next.next;
             }
-            if (result) {
+            else {
+                break;
+            }
+
+            if(turtle == null || hare == null) {
+                break;
+            }
+            if(turtle == hare) {
+                result = true;
                 break;
             }
         }
