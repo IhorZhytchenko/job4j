@@ -50,7 +50,37 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     public int size() {
         return size;
     }
+    /**
+     * Removes the element at the specified position in this list.
+     *
+     * @param index the index of the element to be removed
+     */
+    public void remove(int index) {
+        if (index >= this.size || index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> x = node(index);
+        final Node<T> next = x.next;
+        final Node<T> prev = x.prev;
 
+        if (prev == null) {
+            this.first = next;
+        } else {
+            prev.next = next;
+            x.prev = null;
+        }
+
+        if (next == null) {
+            this.last = prev;
+        } else {
+            next.prev = prev;
+            x.next = null;
+        }
+
+        x.item = null;
+        this.size--;
+        this.modCount++;
+    }
     /**
      * Returns the  Node at the specified element index.
      */
