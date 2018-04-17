@@ -9,11 +9,11 @@ package set;
 public class SimpleHashSet<E> {
     private static final int DEFAULT_CAPACITY = 100;
     private static final double MAX_LOAD = 0.75;
-    private Entry<?> [] table;
+    private Entry<E> [] table;
     private int size;
 
     public SimpleHashSet() {
-        this.table = new Entry<?>[DEFAULT_CAPACITY];
+        this.table = (Entry<E>[]) new Entry[DEFAULT_CAPACITY];
         this.size = 0;
     }
 
@@ -73,7 +73,7 @@ public class SimpleHashSet<E> {
     private void rehash() {
         final Entry<?>[] old = this.table;
         int capacity = this.table.length * 2;
-        this.table = new Entry<?>[capacity];
+        this.table = (Entry<E>[]) new Entry[capacity];
         for (int i = 0; i < old.length; i++) {
             if (old[i] != null) {
                 Entry<E> entry = (Entry<E>) old[i];
