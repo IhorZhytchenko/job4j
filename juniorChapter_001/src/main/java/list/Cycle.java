@@ -18,7 +18,7 @@ public class Cycle {
         Node turtle = first;
         Node hare = first;
         boolean result = false;
-        while (true) {
+        while (turtle != null && hare != null) {
             turtle = turtle.next;
             if (hare.next != null) {
                 hare = hare.next.next;
