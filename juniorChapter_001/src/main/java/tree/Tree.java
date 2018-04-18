@@ -36,11 +36,26 @@ class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     @Override
     public boolean add(E parent, E child) {
         Optional<Node<E>> par = this.findBy(parent);
+        boolean result = false;
        if (par.isPresent()) {
-           par.get().add(new Node<>(child));
-           this.modCount++;
+           if (this.identityCheck(par.get(), child)) {
+               par.get().add(new Node<>(child));
+               this.modCount++;
+               result = true;
+           }
        }
-        return par.isPresent();
+        return result;
+    }
+
+    private boolean identityCheck(Node<E> parent, E child) {
+        boolean result = true;
+        for (Node<E> ch : parent.leaves()) {
+           if (ch.equals(child)) {
+               result = false;
+               break;
+           }
+        }
+        return result;
     }
 
     @Override
