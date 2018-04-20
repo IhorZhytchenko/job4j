@@ -18,20 +18,18 @@ public class Cycle {
         Node turtle = first;
         Node hare = first;
         boolean result = false;
-        while (turtle != null && hare != null) {
+        while (!result) {
             turtle = turtle.next;
             if (hare.next != null) {
                 hare = hare.next.next;
             } else {
                 break;
             }
-
             if (turtle == null || hare == null) {
                 break;
             }
             if (turtle == hare) {
                 result = true;
-                break;
             }
         }
         return result;
