@@ -1,5 +1,8 @@
 package list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.*;
 
 /**
@@ -9,10 +12,14 @@ import java.util.*;
  * @version $1$
  * @since 10.04.2018
  */
+@ThreadSafe
 public class SimpleLinkedList<T> implements Iterable<T> {
+    @GuardedBy("this")
     private int size = 0;
     private int modCount = 0;
+    @GuardedBy("this")
     private Node<T> first;
+    @GuardedBy("this")
     private Node<T> last;
 
 
@@ -22,16 +29,18 @@ public class SimpleLinkedList<T> implements Iterable<T> {
      * @param value element to be appended to this list
      */
     public void add(T value) {
-        final Node<T> l = this.last;
-        final Node<T> newNode = new Node<>(l, value, null);
-        last = newNode;
-        if (l == null) {
-            this.first = newNode;
-        } else {
-            l.next = newNode;
+        synchronized (this) {
+            final Node<T> l = this.last;
+            final Node<T> newNode = new Node<>(l, value, null);
+            last = newNode;
+            if (l == null) {
+                this.first = newNode;
+            } else {
+                l.next = newNode;
+            }
+            this.size++;
+            this.modCount++;
         }
-        this.size++;
-        this.modCount++;
     }
     /**
      * Returns the element at the specified position in this list.
@@ -49,7 +58,9 @@ public class SimpleLinkedList<T> implements Iterable<T> {
      * @return the number of elements in this list
      */
     public int size() {
-        return size;
+        synchronized (this) {
+            return size;
+        }
     }
     /**
      * Removes the element at the specified position in this list.
@@ -57,50 +68,61 @@ public class SimpleLinkedList<T> implements Iterable<T> {
      * @param index the index of the element to be removed
      */
     public void remove(int index) {
-        if (index >= this.size || index < 0) {
-            throw new IndexOutOfBoundsException();
-        }
-        Node<T> x = node(index);
-        final Node<T> next = x.next;
-        final Node<T> prev = x.prev;
+        synchronized (this) {
+            if (index >= this.size || index < 0) {
+                throw new IndexOutOfBoundsException();
+            }
+            Node<T> x = node(index);
+            final Node<T> next = x.next;
+            final Node<T> prev = x.prev;
 
-        if (prev == null) {
-            this.first = next;
-        } else {
-            prev.next = next;
-            x.prev = null;
-        }
+            if (prev == null) {
+                this.first = next;
+            } else {
+                prev.next = next;
+                x.prev = null;
+            }
 
-        if (next == null) {
-            this.last = prev;
-        } else {
-            next.prev = prev;
-            x.next = null;
-        }
+            if (next == null) {
+                this.last = prev;
+            } else {
+                next.prev = prev;
+                x.next = null;
+            }
 
-        x.item = null;
-        this.size--;
-        this.modCount++;
+            x.item = null;
+            this.size--;
+            this.modCount++;
+        }
     }
+
+    private Node<T> getFirst() {
+        synchronized (this) {
+            return first;
+        }
+    }
+
     /**
      * Returns the  Node at the specified element index.
      */
     private   Node<T> node(int index) {
-        if ((index < 0) || (index >= size)) {
-           throw new IndexOutOfBoundsException();
-        }
-        if (index < (size / 2)) {
-            Node<T> x = first;
-            for (int i = 0; i < index; i++) {
-                x = x.next;
+        synchronized (this) {
+            if ((index < 0) || (index >= size)) {
+                throw new IndexOutOfBoundsException();
             }
-            return x;
-        } else {
-            Node<T> x = last;
-            for (int i = size - 1; i > index; i--) {
-                x = x.prev;
+            if (index < (size / 2)) {
+                Node<T> x = first;
+                for (int i = 0; i < index; i++) {
+                    x = x.next;
+                }
+                return x;
+            } else {
+                Node<T> x = last;
+                for (int i = size - 1; i > index; i--) {
+                    x = x.prev;
+                }
+                return x;
             }
-            return x;
         }
     }
     /**
@@ -115,27 +137,31 @@ public class SimpleLinkedList<T> implements Iterable<T> {
 
     private class Itr implements Iterator<T> {
         private Node<T> lastReturned;
-        private Node<T> next = SimpleLinkedList.this.first;
+        private Node<T> next = SimpleLinkedList.this.getFirst();
         private int nextIndex = 0;
-        int expectedModCount = SimpleLinkedList.this.modCount;
+        final int expectedModCount = SimpleLinkedList.this.modCount;
 
         @Override
         public boolean hasNext() {
-            return nextIndex < SimpleLinkedList.this.size;
+            synchronized (SimpleLinkedList.this) {
+                return nextIndex < SimpleLinkedList.this.size;
+            }
         }
 
         @Override
         public T next() {
-            if (this.expectedModCount != SimpleLinkedList.this.modCount) {
-                throw new ConcurrentModificationException();
+            synchronized (SimpleLinkedList.this) {
+                if (this.expectedModCount != SimpleLinkedList.this.modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (!this.hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                lastReturned = next;
+                next = next.next;
+                nextIndex++;
+                return lastReturned.item;
             }
-            if (!this.hasNext()) {
-                throw new NoSuchElementException();
-            }
-            lastReturned = next;
-            next = next.next;
-            nextIndex++;
-            return lastReturned.item;
         }
     }
     /**
