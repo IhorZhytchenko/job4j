@@ -15,19 +15,6 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     private Node<T> first;
     private Node<T> last;
 
-    public static void main(String[] args) {
-        TreeSet<Integer> set = new TreeSet<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return 0;
-            }
-        });
-        set.add(1);
-        set.add(2);
-        set.add(1);
-        System.out.println(set);
-    }
-
 
     /**
      * Appends the specified element to the end of this list.
