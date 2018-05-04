@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
  * @since 27.04.2018
  */
 public class RectangleMove implements Runnable {
-    private static final double SIZE_X = 300.0;
+    private static final double SIZE_X = 310.0;
     private final Rectangle rect;
     private int step = 1;
 
