@@ -11,22 +11,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 03.05.2018
  */
 public class NonBlockingCache<V> {
-    private ConcurrentHashMap<Integer,Entry<V>> cache = new ConcurrentHashMap<>();
-    private AtomicInteger nextIndex = new AtomicInteger(0);
+    private ConcurrentHashMap<V,Entry<V>> cache = new ConcurrentHashMap<>();
+
 
     public Entry<V> add(V value) {
-        final int index = this.nextIndex.getAndIncrement();
-        Entry<V> entry = new Entry<>(index, value);
-        this.cache.put(index, entry);
-        return entry;
+        Entry<V> entry = new Entry<>( value);
+        Entry<V> putEntry = this.cache.putIfAbsent(value, entry);
+        return putEntry == null ? entry : putEntry;
     }
 
     public void delete(Entry<V> data) {
-        this.cache.remove(data.getIndex());
+        this.cache.remove(data.getValue());
     }
 
     public void update(Entry<V> data) throws OplimisticException {
-        this.cache.computeIfPresent(data.getIndex(), (key, oldValue) -> {
+        this.cache.computeIfPresent(data.getValue(), (key, oldValue) -> {
             int oldVersion = oldValue.getVersion();
             if (oldVersion  != data.getVersion()) {
                 throw new OplimisticException();
@@ -39,20 +38,15 @@ public class NonBlockingCache<V> {
 
     public  static class Entry<V> {
         int version = 0;
-        int index ;
         V value;
 
-        public Entry(int index, V value) {
-            this.index = index;
+        public Entry(V value) {
+
             this.value = value;
         }
 
         public int getVersion() {
             return this.version;
-        }
-
-        public int getIndex() {
-            return this.index;
         }
 
         public V getValue() {
