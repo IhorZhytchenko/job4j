@@ -9,7 +9,7 @@ import java.util.*;
  * Books.
  *
  * @author Ihor Zhytchenko (igor.zhytchenko@gmail.com)
- * @version $1$
+ * @version $2$
  * @since 26.04.2018
  */
 public class Books {
@@ -42,25 +42,19 @@ public class Books {
         }
     }
 
+    public String getBookValue(String name, int price) {
+        String result;
+        if (this.books.containsKey(name)) {
+            result = this.books.get(name).getValue(price);
+        } else {
+            result = "not found";
+        }
+        return result;
+    }
+
     private void addDelete(Bid bid) {
         if (this.books.containsKey(bid.getBook())) {
-            Map<Integer, Integer> book;
-            if (bid.getAction() == Action.bid) {
-                book = this.books.get(bid.getBook()).getBuy();
-            } else if (bid.getAction() == Action.ask) {
-                book = this.books.get(bid.getBook()).getSell();
-            } else {
-                return;
-            }
-            int key = bid.getPrice();
-            if (book.containsKey(key)) {
-               int volume = bid.getVolume();
-               if (book.get(key) > volume) {
-                   book.put(key, book.get(key) - volume);
-               } else {
-                   book.remove(key);
-               }
-            }
+            this.books.get(bid.getBook()).delete(bid);
         }
 
     }
@@ -68,9 +62,9 @@ public class Books {
     private void addAdd(Bid bid) {
         if (this.books.containsKey(bid.getBook())) {
             if (bid.getAction() == Action.bid) {
-               addAddBid(bid);
+               this.books.get(bid.getBook()).addAddBid(bid, getComporator());
             } else  if (bid.getAction() == Action.ask) {
-                addAddAsk(bid);
+                this.books.get(bid.getBook()).addAddAsk(bid);
             }
 
         } else {
@@ -78,85 +72,9 @@ public class Books {
         }
     }
 
-    private void addAddAsk(Bid bid) {
-        Map<Integer, Integer> buy = this.books.get(bid.getBook()).getBuy();
-        Map<Integer, Integer> sell = this.books.get(bid.getBook()).getSell();
-        int price = bid.getPrice();
-        int value = bid.getVolume();
-        final List<Integer> priceList = new ArrayList<>(sell.keySet());
-        for (int i = priceList.size() - 1; i >= 0; i--) {
-            if (priceList.get(i) <= price) {
-                int key = priceList.get(i);
-                if (sell.get(key) > value) {
-                    sell.put(key, sell.get(key) - value);
-                    value = 0;
-                    break;
-                } else if (sell.get(key) == value) {
-                    sell.remove(key);
-                    value = 0;
-                    break;
-                } else {
-                    value = value - sell.get(key);
-                    sell.remove(key);
-                }
-
-            } else {
-                break;
-            }
-        }
-        if (value > 0) {
-            if (buy.containsKey(price)) {
-                buy.put(price, (buy.get(price) + value));
-            } else {
-                buy.put(price, value);
-            }
-        }
-    }
-
-    private void addAddBid(Bid bid) {
-        Map<Integer, Integer> buy = this.books.get(bid.getBook()).getBuy();
-        Map<Integer, Integer> sell = this.books.get(bid.getBook()).getSell();
-        int price = bid.getPrice();
-        int value = bid.getVolume();
-        final Set<Integer> priceSet = new TreeSet<>(getComporator());
-        priceSet.addAll(buy.keySet());
-        for (Integer p : priceSet) {
-            if (p >= price) {
-                int key = p;
-                if (buy.get(key) > value) {
-                    buy.put(key, buy.get(key) - value);
-                    value = 0;
-                    break;
-                } else if (buy.get(key) == value) {
-                    buy.remove(key);
-                    value = 0;
-                    break;
-                } else {
-                    value = value - buy.get(key);
-                    buy.remove(key);
-                }
-
-            } else {
-                break;
-            }
-        }
-        if (value > 0) {
-            if (sell.containsKey(price)) {
-                sell.put(price, (sell.get(price) + value));
-            } else {
-                sell.put(price, value);
-            }
-        }
-
-    }
-
     private void addNew(Bid bid) {
         Book book = new Book(bid.getBook(), this.getComporator());
-        if (bid.getAction() == Action.bid) {
-            book.getSell().put(bid.getPrice(), bid.getVolume());
-        } else  if (bid.getAction() == Action.ask) {
-            book.getBuy().put(bid.getPrice(), bid.getVolume());
-        }
+        book.addInNew(bid);
         this.books.put(bid.getBook(), book);
     }
 
