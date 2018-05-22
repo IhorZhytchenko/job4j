@@ -14,9 +14,9 @@ import java.util.Scanner;
 public class Cli {
     private static final String PATH_XML1 = "juniorChapter_003/src/main/java/jdbc/1.xml";
     private static final String PATH_XML2 = "juniorChapter_003/src/main/java/jdbc/2.xml";
-    private Parser parser;
-    private JdbcManager manager;
-    private Scanner scanner;
+    private final Parser parser;
+    private final JdbcManager manager;
+    private final Scanner scanner;
     private int n;
 
     public Cli() {
