@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config>
+    <url>jdbc:postgresql://localhost:5432/tracker</url>
+    <login>postgres</login>
+    <password>220889</password>
+    <addItem>insert into item(name, description, date) values (?, ?, ?)</addItem>
+    <createTable>create table if not exists item (id serial primary key, name character varying(500), description text, date timestamp);</createTable>
+    <deleteItem>delete from item where id = ?</deleteItem>
+    <findById>select * from item where id = ?</findById>
+    <findByName>select * from item where name = ?</findByName>
+    <getAllItems>select * from item</getAllItems>
+    <updateItem>update item set name = ?, description = ?, date = ? where id = ?</updateItem>
+</config>
