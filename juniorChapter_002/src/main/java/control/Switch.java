@@ -19,11 +19,7 @@ public class Switch {
         Thread thread1 = new Thread(() -> {
             while (!Switch.this.cancel) {
                 while (!Switch.this.label) {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
                 }
                 for (int i = 0; i < 10; i++) {
                     Switch.this.addValue(1);

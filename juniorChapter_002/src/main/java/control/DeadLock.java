@@ -1,4 +1,7 @@
 package control;
+
+import java.util.concurrent.CountDownLatch;
+
 /**
  * DeadLock.
  *
@@ -7,17 +10,19 @@ package control;
  * @since 07.05.2018
  */
 public class DeadLock {
+    private final CountDownLatch latch = new CountDownLatch(2);
 
     public void doSomething(Object o1, Object o2) {
         synchronized (o1) {
+            this.latch.countDown();
             try {
-                Thread.sleep(100);
+                this.latch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             System.out.println(Thread.currentThread().getName() + " - ждет освобождения второго ресурса");
             synchronized (o2) {
-
+                System.out.println(Thread.currentThread().getName() + " - занял второй ресурс");
             }
         }
     }
