@@ -43,6 +43,6 @@ public class UserCreateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.logic.add(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
-        resp.sendRedirect(req.getContextPath() + "/list");
+        resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
 }
