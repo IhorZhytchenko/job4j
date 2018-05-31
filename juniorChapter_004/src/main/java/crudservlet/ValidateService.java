@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ValidateService {
     private static final ValidateService INSTANCE = new ValidateService();
-    private final Store logic = MemoreStore.getInstance();
+    private final Store logic = DBStore.getInstance();
 
     private ValidateService() {
 

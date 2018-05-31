@@ -17,6 +17,16 @@ public class UsersServlet extends HttpServlet {
     private final ValidateService logic = ValidateService.getInstance();
 
     @Override
+    public void destroy() {
+        DBStore.getInstance().close();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        DBStore.getInstance().init();
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
         req.setCharacterEncoding("UTF-8");

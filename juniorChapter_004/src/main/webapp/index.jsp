@@ -11,7 +11,7 @@
         <tr>
             <td><%=user.getId()%></td>
             <td><%=user.getName()%></td>
-            <<td><a  href="<%=request.getContextPath()%>/edit?id=<%=user.getId()%>">Edit</a></td>
+            <td><a  href="<%=request.getContextPath()%>/edit?id=<%=user.getId()%>">Edit</a></td>
             </td>
             <td><form method="post" action="<%=request.getContextPath()%>/list?id=<%=user.getId()%>">
                     <button type=\"submit\">Delete</button>
