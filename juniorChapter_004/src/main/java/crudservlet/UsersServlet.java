@@ -28,43 +28,13 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setCharacterEncoding("UTF-8");
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html");
-        StringBuilder sb = new StringBuilder("<table>");
-        for (User user : this.logic.findAll()) {
-            sb.append("<tr><td>" + user.getId() + "</td>");
-            sb.append("<td>" + user.getName() + "</td>");
-            sb.append("<td> <a  href=\"" +  req.getContextPath() + "/edit?id=" + user.getId() + "\" >Edit</a>" +
-                    "</td>");
-            sb.append("<td><form method=\"post\" action=\"" + req.getContextPath() + "/list?id=" + user.getId() + "\">" +
-                    "    <button type=\"submit\">Delete</button>" +
-                    "</form></td>");
-
-            sb.append("</tr>");
-        }
-
-        sb.append("</table>");
-
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        writer.append("<!DOCTYPE html>" +
-                "<html lang=\"en\">" +
-                "<head>" +
-                "    <meta charset=\"UTF-8\">" +
-                "    <title>Users</title>" +
-                "</head>" +
-                "<body>" + sb.toString() +
-                        "<form action=\"" + req.getContextPath() + "/create\">" +
-                        "    <button type=\"submit\">Create User</button>" +
-                        "</form>" +
-                "</body>" +
-                "</html>");
-        writer.flush();
+        req.setAttribute("users",this.logic.findAll());
+        req.getRequestDispatcher("/WEB-INF/views/UsersView.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.logic.delete(Long.parseLong(req.getParameter("id")));
-        resp.sendRedirect(req.getContextPath() + "/index.jsp");
+        resp.sendRedirect(req.getContextPath() + "/");
     }
 }
