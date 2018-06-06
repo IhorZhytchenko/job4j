@@ -12,11 +12,29 @@ public class User {
     private long id;
     private String name;
     private String email;
+    private String password;
+    private String role;
     private String login;
     private LocalDate createDate;
 
     public User() {
         this.createDate = LocalDate.now();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public long getId() {

@@ -33,7 +33,7 @@ public class MemoreStore implements Store {
     }
 
     @Override
-    public void update(long id, String name, String login, String email) {
+    public void update(long id, String name, String login, String email, String password, String role) {
         this.users.computeIfPresent(id, (key, value) -> {
                     if (name != null) {
                         value.setName(name);
@@ -68,5 +68,10 @@ public class MemoreStore implements Store {
     @Override
     public boolean contains(long id) {
         return this.users.containsKey(id);
+    }
+
+    @Override
+    public User signin(String login, String password) {
+        return null;
     }
 }

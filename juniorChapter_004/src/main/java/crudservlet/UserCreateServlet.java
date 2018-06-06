@@ -18,12 +18,12 @@ public class UserCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/views/CreateUserView.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/views/CreateUserView.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.logic.add(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
-        resp.sendRedirect(req.getContextPath() + "/");
+        this.logic.add(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"), req.getParameter("password"), req.getParameter("role"));
+        resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

@@ -23,12 +23,12 @@ public class UserServlet extends HttpServlet {
 
     private Consumer<HttpServletRequest> add() {
         return req -> {
-            this.logic.add(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
+            //this.logic.add(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
         };
     }
     private Consumer<HttpServletRequest> update() {
         return req -> {
-            this.logic.update(Long.parseLong(req.getParameter("id")), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
+           // this.logic.update(Long.parseLong(req.getParameter("id")), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
         };
     }
     private Consumer<HttpServletRequest> delete() {

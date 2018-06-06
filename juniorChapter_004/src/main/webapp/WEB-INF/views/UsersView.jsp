@@ -6,6 +6,9 @@
     <title>Users</title>
 </head>
 <body>
+<form action="${pageContext.servletContext.contextPath}/exit">
+    <button type="submit">exit</button>
+</form>
     <table>
         <c:forEach items="${users}" var="user">
         <tr>

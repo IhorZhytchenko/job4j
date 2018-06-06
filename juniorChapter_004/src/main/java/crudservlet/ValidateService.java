@@ -20,17 +20,19 @@ public class ValidateService {
         return INSTANCE;
     }
 
-    public void add(String name, String login, String email) {
+    public void add(String name, String login, String email, String password, String role) {
         User user = new User();
         user.setName(name);
         user.setLogin(login);
         user.setEmail(email);
+        user.setPassword(password);
+        user.setRole(role);
         this.logic.add(user);
     }
 
-    public void update(long id, String name, String login, String email) {
+    public void update(long id, String name, String login, String email, String password, String role) {
         if (this.logic.contains(id)) {
-            this.logic.update(id, name, login, email);
+            this.logic.update(id, name, login, email, password, role);
         }
     }
 
@@ -50,6 +52,10 @@ public class ValidateService {
             result = this.logic.findById(id);
         }
         return result;
+    }
+
+    public User signin(String login, String password) {
+        return this.logic.signin(login, password);
     }
 
 }

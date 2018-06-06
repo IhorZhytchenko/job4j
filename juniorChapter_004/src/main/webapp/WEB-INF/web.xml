@@ -52,4 +52,65 @@
         <servlet-name>UserUpdateServlet</servlet-name>
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SignInController</servlet-name>
+        <servlet-class>crudservlet.SignInController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignInController</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ExitController</servlet-name>
+        <servlet-class>crudservlet.ExitController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExitController</servlet-name>
+        <url-pattern>/exit</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>crudservlet.AuthFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CreateFilter</filter-name>
+        <filter-class>crudservlet.CreateFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>CreateFilter</filter-name>
+        <url-pattern>/create</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EditFilter</filter-name>
+        <filter-class>crudservlet.EditFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>EditFilter</filter-name>
+        <url-pattern>/edit</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>DeleteFilter</filter-name>
+        <filter-class>crudservlet.DeleteFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>DeleteFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+
 </web-app>
