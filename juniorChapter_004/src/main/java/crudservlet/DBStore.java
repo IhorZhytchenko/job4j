@@ -2,6 +2,10 @@ package crudservlet;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
  * @since 31.05.2018
  */
 public class DBStore implements Store {
+    private static final String PATH ="C:/projects/job4j/juniorChapter_004/src/main/java/crudservlet/config.xml";
     private static final String CREATE = "create table if not exists users ("
             + "id serial primary key,"
             + "name character varying (500),"
@@ -24,6 +29,7 @@ public class DBStore implements Store {
             + ");";
     private static final DBStore INSTANCE = new DBStore();
     private final BasicDataSource bds = new BasicDataSource();
+    private Config config;
 
     private DBStore() {
 
@@ -35,15 +41,31 @@ public class DBStore implements Store {
     }
 
     public void init() {
-        this.bds.setDriverClassName("org.postgresql.Driver");
-        this.bds.setUrl("jdbc:postgresql://localhost:5432/servlet");
-        this.bds.setUsername("postgres");
-        this.bds.setPassword("220889");
+        this.config = this.loadConfig();
+        this.bds.setDriverClassName(this.config.getDriverName());
+        this.bds.setUrl(this.config.getUrl());
+        this.bds.setUsername(this.config.getLogin());
+        this.bds.setPassword(this.config.getPassword());
 
-        this.bds.setMinIdle(5);
-        this.bds.setMaxIdle(10);
-        this.bds.setMaxOpenPreparedStatements(100);
+        this.bds.setMinIdle(this.config.getMinIdle());
+        this.bds.setMaxIdle(this.config.getMaxIdle());
+        this.bds.setMaxOpenPreparedStatements(this.config.getMaxPS());
         this.createDb();
+    }
+
+    private Config loadConfig() {
+        File file = new File(PATH);
+        JAXBContext jaxbContext = null;
+        Config result = null;
+        try {
+            jaxbContext = JAXBContext.newInstance(Config.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            result = (Config) jaxbUnmarshaller.unmarshal(file);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     private void createDb() {
