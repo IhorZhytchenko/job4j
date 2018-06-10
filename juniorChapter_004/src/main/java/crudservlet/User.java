@@ -16,9 +16,18 @@ public class User {
     private String role;
     private String login;
     private LocalDate createDate;
+    private long addressId;
 
     public User() {
         this.createDate = LocalDate.now();
+    }
+
+    public long getAdressId() {
+        return addressId;
+    }
+
+    public void setAdressId(long adressId) {
+        this.addressId = adressId;
     }
 
     public String getPassword() {

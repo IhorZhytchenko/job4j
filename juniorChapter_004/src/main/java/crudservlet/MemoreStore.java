@@ -33,7 +33,7 @@ public class MemoreStore implements Store {
     }
 
     @Override
-    public void update(long id, String name, String login, String email, String password, String role) {
+    public void update(long id, String name, String login, String email, String password, String role, long addressId) {
         this.users.computeIfPresent(id, (key, value) -> {
                     if (name != null) {
                         value.setName(name);
@@ -73,5 +73,24 @@ public class MemoreStore implements Store {
     @Override
     public User signin(String login, String password) {
         return null;
+    }
+
+    @Override
+    public void addAddress(String city, String country) {
+    }
+
+    @Override
+    public List<Address> allAddresses() {
+        return null;
+    }
+
+    @Override
+    public Address addressById(long id) {
+        return null;
+    }
+
+    @Override
+    public boolean containsAddress(String city, String country) {
+        return false;
     }
 }

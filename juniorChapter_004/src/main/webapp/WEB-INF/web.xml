@@ -66,11 +66,21 @@
     <servlet>
         <servlet-name>ExitController</servlet-name>
         <servlet-class>crudservlet.ExitController</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>ExitController</servlet-name>
         <url-pattern>/exit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddressController</servlet-name>
+        <servlet-class>crudservlet.AddressController</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddressController</servlet-name>
+        <url-pattern>/address</url-pattern>
     </servlet-mapping>
 
     <filter>

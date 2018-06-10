@@ -24,7 +24,7 @@ public class UserUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.logic.update(Long.parseLong(req.getParameter("id")), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"), req.getParameter("password"), req.getParameter("role"));
+        this.logic.update(Long.parseLong(req.getParameter("id")), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"), req.getParameter("password"), req.getParameter("role"), Long.parseLong(req.getParameter("addressId")));
         resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

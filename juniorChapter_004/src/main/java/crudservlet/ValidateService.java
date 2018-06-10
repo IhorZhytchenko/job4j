@@ -20,19 +20,33 @@ public class ValidateService {
         return INSTANCE;
     }
 
-    public void add(String name, String login, String email, String password, String role) {
+    public void addAddress(String city, String country) {
+        if (!this.logic.containsAddress(city, country)) {
+            this.logic.addAddress(city, country);
+        }
+
+    }
+    public  List<Address> allAddresses() {
+        return this.logic.allAddresses();
+    }
+    public Address addressById(long id) {
+        return this.logic.addressById(id);
+    }
+
+    public void add(String name, String login, String email, String password, String role, long addressId) {
         User user = new User();
         user.setName(name);
         user.setLogin(login);
         user.setEmail(email);
         user.setPassword(password);
         user.setRole(role);
+        user.setAdressId(addressId);
         this.logic.add(user);
     }
 
-    public void update(long id, String name, String login, String email, String password, String role) {
+    public void update(long id, String name, String login, String email, String password, String role, long addressId) {
         if (this.logic.contains(id)) {
-            this.logic.update(id, name, login, email, password, role);
+            this.logic.update(id, name, login, email, password, role, addressId);
         }
     }
 

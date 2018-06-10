@@ -18,14 +18,20 @@ import java.util.List;
  */
 public class DBStore implements Store {
     private static final String PATH ="C:/projects/job4j/juniorChapter_004/src/main/java/crudservlet/config.xml";
-    private static final String CREATE = "create table if not exists users ("
+    private static final String CREATE =  "create table if not exists address ("
+            + "id serial primary key,"
+            + "city character varying (500),"
+            + "country character varying (500)"
+            +");"
+            + "create table if not exists users ("
             + "id serial primary key,"
             + "name character varying (500),"
             + "login character varying (500),"
             + "email character varying (500),"
             + "password character varying (500),"
             + "role character varying (500),"
-            + "create_date date"
+            + "create_date date,"
+            + "adressId integer references address(id)"
             + ");";
     private static final DBStore INSTANCE = new DBStore();
     private final BasicDataSource bds = new BasicDataSource();
@@ -91,13 +97,14 @@ public class DBStore implements Store {
     @Override
     public void add(User user) {
         try (Connection connection = this.bds.getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert  into users(name, login, email, create_date, password, role) values (?, ?, ?, ?, ?, ?) ")) {
+            PreparedStatement ps = connection.prepareStatement("insert  into users(name, login, email, create_date, password, role, adressId) values (?, ?, ?, ?, ?, ?, ?) ")) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getLogin());
             ps.setString(3, user.getEmail());
             ps.setDate(4, Date.valueOf(user.getCreateDate()));
             ps.setString(5, user.getPassword());
             ps.setString(6, user.getRole());
+            ps.setLong(7, user.getAdressId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,15 +112,16 @@ public class DBStore implements Store {
     }
 
     @Override
-    public void update(long id, String name, String login, String email, String password, String role) {
+    public void update(long id, String name, String login, String email, String password, String role, long addressId) {
         try (Connection connection = this.bds.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update users set name = ?, login = ?, email = ?, password = ?, role = ? where id = ?")) {
+            PreparedStatement ps = connection.prepareStatement("update users set name = ?, login = ?, email = ?, password = ?, role = ?, adressId = ? where id = ?")) {
             ps.setString(1, name);
             ps.setString(2, login);
             ps.setString(3, email);
             ps.setString(4, password);
             ps.setString(5, role);
-            ps.setLong(6, id);
+            ps.setLong(6, addressId);
+            ps.setLong(7, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -146,6 +154,7 @@ public class DBStore implements Store {
                 user.setEmail(rs.getString("email"));
                 user.setRole(rs.getString("role"));
                 user.setPassword(rs.getString("password"));
+                user.setAdressId(rs.getLong("adressId"));
                 if (rs.getDate("create_date") != null) {
                     user.setCreateDate(rs.getDate("create_date").toLocalDate());
                 }
@@ -171,6 +180,7 @@ public class DBStore implements Store {
                     user.setEmail(rs.getString("email"));
                     user.setRole(rs.getString("role"));
                     user.setPassword(rs.getString("password"));
+                    user.setAdressId(rs.getLong("adressId"));
                     if (rs.getDate("create_date") != null) {
                         user.setCreateDate(rs.getDate("create_date").toLocalDate());
                     }
@@ -205,6 +215,7 @@ public class DBStore implements Store {
                     user.setEmail(rs.getString("email"));
                     user.setRole(rs.getString("role"));
                     user.setPassword(rs.getString("password"));
+                    user.setAdressId(rs.getLong("adressId"));
                     if (rs.getDate("create_date") != null) {
                         user.setCreateDate(rs.getDate("create_date").toLocalDate());
                     }
@@ -214,6 +225,76 @@ public class DBStore implements Store {
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public void addAddress(String city, String country) {
+        try (Connection connection = this.bds.getConnection();
+             PreparedStatement ps = connection.prepareStatement("insert  into address(city, country) values (?, ?) ")) {
+            ps.setString(1, city);
+            ps.setString(2, country);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public List<Address> allAddresses() {
+        List<Address> result = new ArrayList<>();
+        try (Connection connection = this.bds.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery("select * from address")) {
+            while (rs.next()) {
+                Address address = new Address();
+                address.setId(rs.getLong("id"));
+                address.setCity(rs.getString("city"));
+                address.setCountry(rs.getString("country"));
+                result.add(address);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public Address addressById(long id) {
+        Address address = new Address();
+        try (Connection connection = this.bds.getConnection();
+             PreparedStatement ps = connection.prepareStatement("select * from address where id = ?")) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    address.setId(rs.getLong("id"));
+                    address.setCity(rs.getString("city"));
+                    address.setCountry(rs.getString("country"));
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return address;
+    }
+
+    @Override
+    public boolean containsAddress(String city, String country) {
+        boolean result = false;
+        try (Connection connection = this.bds.getConnection();
+             PreparedStatement ps = connection.prepareStatement("select * from address where city = ? and country = ?")) {
+            ps.setString(1, city);
+            ps.setString(2, country);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }
