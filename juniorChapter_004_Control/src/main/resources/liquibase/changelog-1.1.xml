@@ -1,0 +1,89 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd ">
+
+    <changeSet id="init role 1" author="igor.zhytchenko@gmail.com">
+        <insert tableName="role">
+            <column name="id" value="1">
+            </column>
+            <column name="role_name" value="USER">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM role WHERE id = 1;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init role 2" author="igor.zhytchenko@gmail.com">
+        <insert tableName="role">
+            <column name="id" value="2">
+            </column>
+            <column name="role_name" value="MANDATOR">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM role WHERE id = 2;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init role 3" author="igor.zhytchenko@gmail.com">
+        <insert tableName="role">
+            <column name="id" value="3">
+            </column>
+            <column name="role_name" value="ADMIN">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM role WHERE id = 3;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init users" author="igor.zhytchenko@gmail.com">
+        <insert tableName="users">
+            <column name="first_name" value="admin">
+            </column>
+            <column name="last_name" value="admin">
+            </column>
+            <column name="login" value="admin">
+            </column>
+            <column name="password" value="admin">
+            </column>
+            <column name="role_id" value="3">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM users WHERE login LIKE 'admin' AND password LIKE 'admin';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init music type 1" author="igor.zhytchenko@gmail.com">
+        <insert tableName="musictype">
+            <column name="type" value="RAP">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM musictype WHERE type LIKE 'RAP';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init music type 2" author="igor.zhytchenko@gmail.com">
+        <insert tableName="musictype">
+            <column name="type" value="ROCK">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM musictype WHERE type LIKE 'ROCK';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="init music type 3" author="igor.zhytchenko@gmail.com">
+        <insert tableName="musictype">
+            <column name="type" value="POP">
+            </column>
+        </insert>
+        <rollback>
+            DELETE FROM musictype WHERE type LIKE 'POP';
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

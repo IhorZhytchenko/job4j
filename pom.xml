@@ -86,5 +86,6 @@
        <module>juniorChapter_002</module>
        <module>juniorChapter_003</module>
        <module>juniorChapter_004</module>
-     </modules>
+        <module>juniorChapter_004_Control</module>
+    </modules>
 </project>

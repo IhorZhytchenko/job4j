@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config>
+    <driverName>org.postgresql.Driver</driverName>
+    <url>jdbc:postgresql://localhost:5432/control</url>
+    <login>postgres</login>
+    <password>220889</password>
+
+    <minIdle>5</minIdle>
+    <maxIdle>10</maxIdle>
+    <maxPS>100</maxPS>
+</config>

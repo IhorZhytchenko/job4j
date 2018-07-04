@@ -1,0 +1,61 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd ">
+
+    <changeSet id="create role table" author="igor.zhytchenko@gmail.com">
+        <createTable tableName="role">
+            <column name="id" type="int" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create address table" author="igor.zhytchenko@gmail.com">
+        <createTable tableName="address">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="addr" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create musictype table" author="igor.zhytchenko@gmail.com">
+        <createTable tableName="musictype">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create users table" author="igor.zhytchenko@gmail.com">
+        <createTable tableName="users">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="login" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="address_id" type="int">
+                <constraints foreignKeyName="fk_users_address" references="address(id)"/>
+            </column>
+            <column name="role_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_users_role" references="role(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create users_musictype table" author="igor.zhytchenko@gmail.com">
+        <createTable tableName="users_musictype">
+            <column name="user_id" type="int" >
+                <constraints nullable="false"  primaryKey="true" foreignKeyName="fk_users_musictype_users" references="users(id)"/>
+            </column>
+            <column name="musictype_id" type="int" >
+                <constraints nullable="false"  primaryKey="true" foreignKeyName="fk_users_musictype_musictype" references="musictype(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
