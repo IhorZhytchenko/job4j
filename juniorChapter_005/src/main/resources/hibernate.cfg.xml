@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.characterEncoding">UTF-8</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test1?serverTimezone=UTC</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">220889</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!-- Caching-->
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property>
+        <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+
+        <property name="hibernate.jdbc.batch_size">100</property>
+        <property name="hibernate.order_updates">true</property>
+
+        <!-- Вивід SQL запитів в консоль -->
+        <property name="show_sql">false</property>
+        <property name="format_sql">true</property>
+
+
+        <!-- Автоматичне створення і оновлення структури БД -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+
+
+        <mapping class="homework3.entity.Developer"/>
+        <mapping class="homework3.entity.Project"/>
+        <mapping class="homework3.entity.Customer"/>
+        <mapping class="homework3.entity.Company"/>
+        <mapping class="homework3.entity.Skill"/>
+
+    </session-factory>
+</hibernate-configuration>
