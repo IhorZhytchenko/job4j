@@ -7,24 +7,86 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script>
+        $(
+            showInfo()
+        );
         function showInfo() {
-            var id = $('#showAll').val();
-            alert(id);
+            var all = $("#showAll").is(':checked');
+            $.ajax('./item', {
+                method: 'get',
+                data: {all : all},
+
+                complete: function (data) {
+                    var items = JSON.parse(data.responseText);
+                    $('#data').empty();
+                    $('#data').append('<ul>');
+                    for(var i = 0; i < items.length; i++) {
+                        $('#data').append('<li>');
+                        $('#data').append('<h3>Id: '+items[i].id+'</h3>');
+                        $('#data').append('<h5>Description: '+items[i].desc+'</h5>');
+                        $('#data').append('<h5>Created: '+items[i].created+'</h5>');
+                        if (items[i].done) {
+                             $('#data').append('<input type=\"checkbox\"  name=\"'+items[i].id+ '\" id=\"'+items[i].id+ '\" checked onchange=\"return update(event);\">Done<br>');
+                        } else {
+                            $('#data').append('<input type=\"checkbox\"   name=\"'+items[i].id+ '\" id=\"'+items[i].id+ '\" onchange=\"return update(event);\">Done<br>');
+                        }
+
+
+                        $('#data').append('</li>');
+                    }
+                    $('#data').append('</ul>');
+                }
+
+            });
+            return true;
+        }
+
+        function update(event) {
+            var id =  event.target.name;
+            var done = $('#'+ event.target.name).is(':checked');
+            $.ajax({
+                    type: "POST",
+                    url : './update',
+                    data: {id: id, done: done}
+                }
+            );
+            setTimeout(showInfo, 500);
+        }
+
+        function add() {
+            var descr = $('#desc').val();
+            $.ajax({
+                    type: "POST",
+                    url : './item',
+                    data: {desc: descr}
+                }
+            );
+            setTimeout(showInfo, 500);
+            return true;
+
         }
     </script>
 
 </head>
 <body class="w3-light-grey">
-<input class="w3-check" type="checkbox" id="showAll" name="showAll" onchange="return showInfo();">
-<label>Show All</label>
+
 
 
 
 <div class="w3-container">
-
+    <div class="w3-card w3-white w3-padding w3-margin">
+        <h3>Add item</h3>
+        <input value="" type="text" id="desc" class="w3-input w3-border"/>
+        <input  type="button" class="w3-button w3-large w3-light-blue w3-padding w3-margin" value="Add" onclick="return add();" >
+    </div>
+    <br/>
     <div class="w3-card w3-white">
-        <div class="w3-container w3-green"><h3>#</h3></div>
-        <div class="w3-container w3-light-green"></div>
+        <div class="w3-container w3-light-blue">
+            <h3>Items</h3>
+            <input class="w3-check" type="checkbox" id="showAll" name="showAll" onchange="return showInfo();">
+            <label>Show All</label>
+        </div>
+        <div class="w3-container" id="data"></div>
     </div>
 
 </div>
