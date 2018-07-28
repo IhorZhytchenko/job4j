@@ -2,24 +2,39 @@ package todolist;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+
 /**
  * class ItemDao.
  *
  * @author Ihor Zhytchenko (igor.zhytchenko@gmail.com)
- * @version $1$
- * @since 26.07.2018
+ * @version $2$
+ * @since 28.07.2018
  */
 public class ItemDao {
     private final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = factory.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            return command.apply(session);
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            tx.commit();
+            session.close();
+        }
+    }
     public void create(Item item) {
-        Session session = this.openTransactSession();
-        session.save(item);
-        this.closeTransactSession(session);
+        this.tx(session -> session.save(item));
+
     }
 
     public void update(Item item) {
@@ -35,31 +50,18 @@ public class ItemDao {
     }
 
     public Item getById(long id) {
-        Item result = null;
-        Session session = this.openTransactSession();
-        result = session.get(Item.class,  id);
-        this.closeTransactSession(session);
-        return result;
+        return this.tx(session -> session.get(Item.class,  id));
     }
 
     public List<Item> listAll() {
-        List<Item> result = new ArrayList<>();
-        Session session = this.factory.openSession();
-        String query = "from Item";
-        result = session.createQuery(query).list();
-        session.close();
-
+        List<Item> result = this.tx(session -> session.createQuery("from Item").list());
         return result;
     }
 
     public List<Item> listIncomplete() {
-        List<Item> result = new ArrayList<>();
-        Session session = this.factory.openSession();
-        String query = "from Item where done = false ";
-        result = session.createQuery(query).list();
-        session.close();
-
+        List<Item> result = this.tx(session -> session.createQuery("from Item where done = false ").list());
         return result;
+
     }
 
     private Session openTransactSession() {
@@ -67,7 +69,6 @@ public class ItemDao {
         session.beginTransaction();
         return session;
     }
-
     private void closeTransactSession(Session session) {
         session.getTransaction().commit();
         session.close();
