@@ -11,7 +11,10 @@
 
 
 
-        <mapping resource="todolist/Item.hbm.xml"/>
+        <mapping resource="carstore/Transmission.hbm.xml"/>
+        <mapping resource="carstore/Engine.hbm.xml"/>
+        <mapping resource="carstore/Body.hbm.xml"/>
+        <mapping resource="carstore/Car.hbm.xml"/>
 
 
     </session-factory>
