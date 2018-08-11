@@ -54,13 +54,11 @@ public class ItemDao {
     }
 
     public List<Item> listAll() {
-        List<Item> result = this.tx(session -> session.createQuery("from Item").list());
-        return result;
+        return this.tx(session -> session.createQuery("from Item").list());
     }
 
     public List<Item> listIncomplete() {
-        List<Item> result = this.tx(session -> session.createQuery("from Item where done = false ").list());
-        return result;
+        return this.tx(session -> session.createQuery("from Item where done = false ").list());
 
     }
 
