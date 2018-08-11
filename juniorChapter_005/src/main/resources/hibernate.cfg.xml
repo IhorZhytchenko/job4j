@@ -10,11 +10,15 @@
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
 
 
+        <mapping class="carstore.Body"/>
+        <mapping class="carstore.Transmission"/>
+        <mapping class="carstore.Engine"/>
+        <mapping class="carstore.Car"/>
 
-        <mapping resource="carstore/Transmission.hbm.xml"/>
-        <mapping resource="carstore/Engine.hbm.xml"/>
-        <mapping resource="carstore/Body.hbm.xml"/>
-        <mapping resource="carstore/Car.hbm.xml"/>
+        <!--<mapping resource="carstore/Transmission.hbm.xml"/>-->
+        <!--<mapping resource="carstore/Engine.hbm.xml"/>-->
+        <!--<mapping resource="carstore/Body.hbm.xml"/>-->
+        <!--<mapping resource="carstore/Car.hbm.xml"/>-->
 
 
     </session-factory>

@@ -1,4 +1,7 @@
 package carstore;
+
+import javax.persistence.*;
+
 /**
  * class Body.
  *
@@ -6,10 +9,14 @@ package carstore;
  * @version $1$
  * @since 01.08.2018
  */
+@Entity
+@Table(name = "body")
 public class Body {
     private long id;
     private String name;
-
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -18,6 +25,7 @@ public class Body {
         this.id = id;
     }
 
+    @Column(name = "name")
     public String getName() {
         return name;
     }
